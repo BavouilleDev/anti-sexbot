@@ -1,0 +1,18 @@
+{
+  "name": "sexbotstat",
+  "version": "1.0.0",
+  "description": "Bot Discord anti-scam — modération automatique (discord.js v14)",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5"
+  }
+}
