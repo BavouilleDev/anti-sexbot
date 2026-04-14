@@ -52,6 +52,10 @@ async function registerSlashCommands() {
       name: 'sexbotstat',
       description: 'Affiche les statistiques de sanctions du bot',
     },
+    {
+      name: 'info',
+      description: 'Présentation du bot, installation et support',
+    },
   ];
   await rest.put(Routes.applicationCommands(client.user.id), { body });
   console.log('Commandes slash enregistrées.');
@@ -198,8 +202,49 @@ client.on('messageCreate', async (message) => {
   data = storage.addStrike(data, userId);
 });
 
+function buildInfoEmbed() {
+  return new EmbedBuilder()
+    .setColor(0xe91e63)
+    .setTitle('Anti Sexbot')
+    .setDescription(
+      '*Un bot créé par **Bavouille** pour faire taire les spammers insupportables.*'
+    )
+    .addFields(
+      {
+        name: 'Que fait-il ?',
+        value: [
+          'Détecte automatiquement les messages contenant une **invitation de serveur** et un texte du style *« Omg girl in vc »*.',
+          '',
+          '**Première détection** — Supprime le message, inflige un **mute de 1 h** au spammer sur **tous les serveurs** qui ont le bot, et lui envoie un MP avec un tuto pour **réinitialiser son token**.',
+          '',
+          '**Deuxième détection** — Supprime le message et **kick** le spammer de tous les serveurs qui ont le bot.',
+          '',
+          '**Troisième détection** — Supprime le message et **bannit** le spammer de tous les serveurs qui ont le bot.',
+        ].join('\n'),
+      },
+      {
+        name: 'Comment l’installer ?',
+        value: [
+          '• Cliquer sur son profil, **Ajouter l’application**.',
+          '• Glisser le rôle **Anti Sexbot** tout en haut de la liste des rôles pour qu’il puisse sanctionner n’importe quel membre.',
+        ].join('\n'),
+      },
+      {
+        name: 'Comment supporter le bot ?',
+        value:
+          'Je paye le serveur moi-même parce que ça ne me coûte pas grand-chose, mais si vous voulez me remercier, [allez regarder mes vidéos](https://www.youtube.com/@bavouille/videos).',
+      }
+    );
+}
+
 client.on('interactionCreate', async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
+
+  if (interaction.commandName === 'info') {
+    await interaction.reply({ embeds: [buildInfoEmbed()] });
+    return;
+  }
+
   if (interaction.commandName !== 'sexbotstat') return;
 
   let data = storage.load();
